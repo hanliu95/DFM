@@ -1,6 +1,4 @@
 function [ w0,w,userU,itemU,U3,userZ,itemZ,Z3 ] = DFM( userX,itemX, fX, y,F, k, alpha, beta, option )
-%DFM 此处显示有关此函数的摘要
-%   此处显示详细说明 DFM_v1
 X = [userX,itemX,fX];
 [userId,~] = find(userX');
 [itemId,~] = find(itemX');
@@ -17,11 +15,6 @@ else
 end
 maxItr2 = 5;
 
-%[uNum,iNum] = size(R);
-%IDX = (R~=0);
-%IDXT = IDX';
-%R = ScaleScore(R,k);
-%RT = R';
 lf = zeros(31,1);
 of = zeros(31,1);
 
@@ -31,8 +24,8 @@ itemU = sign(itemV); itemU(itemU == 0) = 1;
 U3 = sign(V3); U3(U3 == 0) = 1;
 
 disp('Starting DFM... ');
-%[loss,obj] = DFMobj(userX,itemX,fX,y,F,k,alpha,beta,w0,w,userU,itemU,U3,userZ,itemZ,Z3);
-%disp(['loss value = ',num2str(loss),' obj value = ',num2str(obj)]);
+[loss,obj] = DFMobj(userX,itemX,fX,y,F,k,alpha,beta,w0,w,userU,itemU,U3,userZ,itemZ,Z3);
+disp(['loss value = ',num2str(loss),' obj value = ',num2str(obj)]);
 
 converge = false;
 it = 1;
@@ -46,8 +39,6 @@ while ~converge
    %optimize userU
    parfor u = 1:unum
       uu = userU(:,u);
-      %iU = itemU(:,IDXT(:,u));
-      %DCDmex(uu,iU*iU',iU*nonzeros(RT(:,u)),beta*userZ(:,u),maxItr2);
       D = itemU(:,itemId(userIDX(:,u))) + F1(:,itemId(userIDX(:,u)));
       pu = p1(userIDX(:,u));
       DCDmex(uu,D*D',D*pu,beta*userZ(:,u),maxItr2);
@@ -56,8 +47,6 @@ while ~converge
    %optimize itemU
    parfor i = 1:inum
       iu = itemU(:,i);
-      %uU = userU(:,IDX(:,i));
-      %DCDmex(iu,uU*uU',uU*nonzeros(R(:,i)),beta*itemZ(:,i),maxItr2);
       D = userU(:,userId(itemIDX(:,i)));
       pi = p1(itemIDX(:,i)) - D'*F1(:,i);
       DCDmex(iu,D*D',D*pi,beta*itemZ(:,i),maxItr2);
@@ -78,9 +67,6 @@ while ~converge
           Q = Q + D*D'*(F(b,j)^2);
           L = L + D*pt*F(b,j);
        end
-       %Q = Q + beta*length(a)*unum/2*eye(k);
-       %L = L + beta*Z3(:,j);
-       %V3(:,j) = Q\L;
        DCDmex(fu,Q,L,beta*U3(:,j),maxItr2);
        U3(:,j) = fu;
    end
@@ -102,18 +88,15 @@ while ~converge
    w0 = w(1); w(1) = [];
    
    disp(['DFM at bit ',int2str(k),' Iteration:',int2str(it)]);
-   %[loss,obj] = DFMobj(userX, itemX, fX, y, F, k, alpha, beta, w0, w, userU, itemU, U3, userZ, itemZ, Z3);
-   %disp(['loss value = ',num2str(loss),' obj value = ',num2str(obj)]);
-   %lf(1+it)=loss;
-   %of(1+it)=obj;
+   [loss,obj] = DFMobj(userX, itemX, fX, y, F, k, alpha, beta, w0, w, userU, itemU, U3, userZ, itemZ, Z3);
+   disp(['loss value = ',num2str(loss),' obj value = ',num2str(obj)]);
    
-   if it >= maxItr%||(sum(sum(userU~=userU0))==0 && sum(sum(itemU~=itemU0))==0&&sum(sum(U3~=U30))==0) 
+   if it >= maxItr||(sum(sum(userU~=userU0))==0 && sum(sum(itemU~=itemU0))==0&&sum(sum(U3~=U30))==0) 
      converge = true; 
    end
    it = it+1;
    
 end
-%save fvalue2 lf of;
 
 end
 

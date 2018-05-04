@@ -1,6 +1,5 @@
 function H_v = UpdateSVD( W )
-%UPDATESVD 此处显示有关此函数的摘要
-%   此处显示详细说明
+
 [b,n] = size(W);
 m = mean(W,2);
 JW = bsxfun(@minus,W,m);

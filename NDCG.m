@@ -1,6 +1,4 @@
 function [ ndcgvalue ] = NDCG( userX,itemX,fX, y,F, w0,w,userU, itemU, U3, kvalue )
-%NDCG 此处显示有关此函数的摘要
-%   此处显示详细说明
 %compute the ndcg@kvalue of discrete factorization machines
 [itemId,~] = find(itemX');
 userIDX = (userX~=0);
