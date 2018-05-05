@@ -1,12 +1,14 @@
-# Discrete Factorization Machines for Fast Feature-based Recommendation
+# Discrete Factorization Machines 
 
 This is our experiments codes for the paper:
 
 Han Liu, Xiangnan He, Fuli Feng, Liqiang Nie, Rui Liu, Hanwang Zhang (2018). Discrete Factorization Machines for Fast Feature-based Recommendation. In Proceedings of IJCAI'18.
 
+*For any issue, please contact Han Liu: hanliu.sdu@gmail.com*
+
 
 ## Environment settings
-We implement our proposed DFM method using MATLAB R2016a.
+MATLAB R2016a.
 
 ## Example to run the codes.
 Please run the 'test.m' file by inputting the command below in MATLAB command window, then the training and the testing of DFM will automatically proceed.
